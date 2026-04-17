@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>IOTA-nder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#faf9f7;--surface:#fff;--surface2:#f3f2ef;--text:#1a1a1a;--text2:#6b6b6b;--text3:#9a9a9a;
+--border:rgba(0,0,0,.08);--border2:rgba(0,0,0,.12);
+--pink:#e8446c;--pink-bg:#fef0f3;--green:#2d8a4e;--green-bg:#edf7f0;
+--red:#d1293d;--red-bg:#fcedef;--amber:#b5850a;--amber-bg:#fef9ec;--purple:#7c5cbf;
+}
+@media(prefers-color-scheme:dark){
+:root{
+--bg:#111;--surface:#1a1a1e;--surface2:#222228;--text:#e8e8e8;--text2:#888;--text3:#555;
+--border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.12);
+--pink:#f06292;--pink-bg:rgba(240,98,146,.1);--green:#66bb6a;--green-bg:rgba(102,187,106,.1);
+--red:#ef5350;--red-bg:rgba(239,83,80,.1);--amber:#ffca28;--amber-bg:rgba(255,202,40,.1);--purple:#b39ddb;
+}}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);
+display:flex;justify-content:center;min-height:100dvh;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+.app{width:100%;max-width:440px;padding:1rem 1rem 2rem;display:flex;flex-direction:column;min-height:100dvh}
+
+.hdr{text-align:center;padding:1rem 0 .8rem}
+.logo{font-family:'Instrument Serif',serif;font-size:32px;font-weight:400;letter-spacing:-.02em}
+.logo em{font-style:italic;color:var(--pink)}
+.logo-s{font-size:11px;color:var(--text3);margin-top:2px;letter-spacing:.02em}
+.cnt{font-size:12px;color:var(--text2);margin-top:8px;font-weight:500}
+
+.stk{position:relative;flex:1;min-height:460px}
+.sc{position:absolute;inset:0;background:var(--surface);border:1px solid var(--border);
+border-radius:20px;padding:1.3rem;display:flex;flex-direction:column;
+transition:transform .4s cubic-bezier(.4,.2,.2,1),opacity .35s;cursor:grab;user-select:none;
+box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.sc.drag{cursor:grabbing;transition:none}
+.sc.ex-r{transform:translateX(140%) rotate(14deg);opacity:0;pointer-events:none}
+.sc.ex-l{transform:translateX(-140%) rotate(-14deg);opacity:0;pointer-events:none}
+.sc.bh{transform:scale(.96) translateY(8px);opacity:.35;pointer-events:none;z-index:0!important}
+
+.card-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.av{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+font-size:22px;flex-shrink:0;background:var(--surface2);border:1.5px solid var(--border2)}
+.card-name{font-family:'Instrument Serif',serif;font-size:19px}
+.card-age{font-size:12px;color:var(--text2);margin-top:1px}
+
+.clinic{background:var(--surface2);border-radius:12px;padding:12px 14px;margin-bottom:14px}
+.clinic-label{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--text3);margin-bottom:6px;text-transform:uppercase}
+.clinic-text{font-size:12.5px;color:var(--text2);line-height:1.55}
+
+.sep{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--text3);margin-bottom:8px;text-transform:uppercase}
+.fr{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;line-height:1.45}
+.fr:last-child{border-bottom:none}
+.bullet{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:6px;background:var(--text3)}
+
+.card-q{text-align:center;margin-top:auto;padding-top:14px;font-size:14px;font-weight:500;
+color:var(--text3);font-family:'Instrument Serif',serif;font-style:italic}
+
+.ol{position:absolute;top:24px;padding:8px 18px;border-radius:10px;font-weight:700;font-size:15px;
+letter-spacing:.06em;opacity:0;pointer-events:none;z-index:10;border:2.5px solid}
+.ol-r{right:18px;color:var(--green);border-color:var(--green);background:var(--green-bg);transform:rotate(-10deg)}
+.ol-l{left:18px;color:var(--red);border-color:var(--red);background:var(--red-bg);transform:rotate(10deg)}
+
+.acts{display:flex;justify-content:center;gap:18px;padding:.8rem 0}
+.ab{width:58px;height:58px;border-radius:50%;border:1.5px solid var(--border2);background:var(--surface);
+display:flex;align-items:center;justify-content:center;cursor:pointer;
+transition:transform .15s,border-color .15s,box-shadow .15s}
+.ab:hover{transform:scale(1.08)}
+.ab:active{transform:scale(.95)}
+.bl:hover{border-color:var(--red);box-shadow:0 0 0 3px var(--red-bg)}
+.br:hover{border-color:var(--green);box-shadow:0 0 0 3px var(--green-bg)}
+.bq:hover{border-color:var(--amber);box-shadow:0 0 0 3px var(--amber-bg)}
+.ab svg{display:block}
+
+.legend{display:flex;justify-content:center;gap:16px;font-size:11px;color:var(--text3);padding-bottom:.5rem}
+.legend span{display:flex;align-items:center;gap:4px}
+
+.fb{position:absolute;inset:0;background:var(--surface);border:1px solid var(--border);border-radius:20px;
+padding:1.8rem;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+z-index:50;box-shadow:0 4px 24px rgba(0,0,0,.08);animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
+.fb.show{display:flex}
+@keyframes pop{0%{transform:scale(.82);opacity:0}100%{transform:scale(1);opacity:1}}
+.fb-ic{font-size:42px;margin-bottom:12px}
+.fb-t{font-size:18px;font-weight:600;margin-bottom:6px}
+.fb-tag{display:inline-block;font-size:12px;font-weight:700;padding:5px 16px;border-radius:20px;margin-bottom:12px}
+.ft-g{background:var(--green-bg);color:var(--green)}
+.ft-r{background:var(--red-bg);color:var(--red)}
+.ft-a{background:var(--amber-bg);color:var(--amber)}
+.fb-exp{font-size:13px;color:var(--text2);max-width:340px;line-height:1.6;margin-bottom:8px}
+.fb-codes{font-family:'Geist Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:16px}
+.fb-nx{background:var(--text);color:var(--bg);border:none;padding:10px 28px;border-radius:100px;
+font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s}
+.fb-nx:hover{opacity:.85}
+
+.rs{display:none;text-align:center;padding:1.5rem 0}
+.rs.show{display:block}
+.rs-t{font-family:'Instrument Serif',serif;font-size:24px;margin-bottom:4px}
+.rs-s{font-size:13px;color:var(--text2);margin-bottom:20px}
+.sg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px}
+.sk{background:var(--surface2);padding:14px 8px;border-radius:12px}
+.sv{font-size:24px;font-weight:600}
+.sl{font-size:11px;color:var(--text2);margin-top:2px}
+.row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--border);font-size:12.5px}
+.row:last-child{border-bottom:none}
+.info-box{background:var(--surface2);padding:14px;border-radius:12px;font-size:12px;color:var(--text2);
+margin:16px 0;line-height:1.6;text-align:left}
+.info-box strong{color:var(--text);font-weight:600}
+.restart{background:var(--text);color:var(--bg);border:none;padding:12px 32px;border-radius:100px;
+font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px}
+.restart:hover{opacity:.85}
+
+.credit{text-align:center;font-size:10px;color:var(--text3);padding:1rem 0;margin-top:auto}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr">
+    <div class="logo"><em>IOTA</em>-nder</div>
+    <div class="logo-s">Where ovarian masses find their diagnosis</div>
+    <div class="cnt" id="cnt">Perfil 1 de 5</div>
+  </div>
+  <div class="stk" id="stk"></div>
+  <div class="acts" id="acts">
+    <button class="ab bl" onclick="doSwipe('left')" title="Maligna"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <button class="ab bq" onclick="doSwipe('nc')" title="No concluyente"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a3 3 0 0 1 5.1 1.5c0 1.5-2.1 2-2.1 2"/><circle cx="12" cy="16.5" r=".5" fill="var(--amber)"/></svg></button>
+    <button class="ab br" onclick="doSwipe('right')" title="Benigna"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></button>
+  </div>
+  <div class="legend" id="leg">
+    <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Maligna</span>
+    <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/></svg> No concluyente</span>
+    <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg> Benigna</span>
+  </div>
+  <div class="rs" id="rs"></div>
+  <div class="credit">Reglas Simples IOTA &middot; Timmerman D. et al. BMJ 2010 &middot; Ginecolog&iacute;a 2026</div>
+</div>
+
+<script>
+const C=[
+{
+  nm:'Valentina',age:'25 a&ntilde;os',dist:'3 km',em:'\uD83D\uDC85',
+  clinic:'G0P0. Sin antecedentes ginecol\u00f3gicos relevantes. Asintom\u00e1tica. Consulta por chequeo de rutina. Se encuentra masa ov\u00e1rica como hallazgo incidental en ecograf\u00eda transvaginal.',
+  findings:[
+    'Lesi\u00f3n unilocular (quiste de una sola cavidad, sin septos)',
+    'Vascularizaci\u00f3n ausente en Doppler color'
+  ],
+  ans:'right',ansLabel:'Benigna',tagC:'ft-g',
+  codes:'Criterios identificados: B1 (unilocular) + B5 (Doppler ausente)',
+  exp:'Dos criterios de benignidad (B1 y B5), ning\u00fan criterio de malignidad. Seg\u00fan las reglas IOTA: al menos una B + ninguna M = benigna. Probable quiste funcional simple. B1+B5 es la combinaci\u00f3n benigna m\u00e1s frecuente en los estudios IOTA.'
+},
+{
+  nm:'Carmen',age:'62 a&ntilde;os',dist:'8 km',em:'\uD83D\uDC83',
+  clinic:'G3P3. Posmenop\u00e1usica desde los 52 a\u00f1os. Antecedente de HTA controlada. Consulta por distensi\u00f3n abdominal progresiva de 3 meses de evoluci\u00f3n, saciedad precoz y p\u00e9rdida de 4 kg de peso no intencional.',
+  findings:[
+    'Tumor s\u00f3lido de contornos irregulares',
+    'Ascitis (l\u00edquido libre en cavidad abdominal)',
+    'Vascularizaci\u00f3n abundante en Doppler color (score 4)'
+  ],
+  ans:'left',ansLabel:'Maligna',tagC:'ft-r',
+  codes:'Criterios identificados: M1 (s\u00f3lido irregular) + M2 (ascitis) + M5 (Doppler alto)',
+  exp:'Tres criterios de malignidad (M1, M2, M5) y ning\u00fan criterio de benignidad. Seg\u00fan las reglas IOTA: al menos una M + ninguna B = maligna. Requiere derivaci\u00f3n urgente a ginecolog\u00eda oncol\u00f3gica.'
+},
+{
+  nm:'Isabela',age:'45 a&ntilde;os',dist:'5 km',em:'\uD83E\uDDD8\u200D\u2640\uFE0F',
+  clinic:'G2P2. Premenop\u00e1usica. Antecedente de endometriosis diagnosticada hace 8 a\u00f1os. Consulta por dolor p\u00e9lvico cr\u00f3nico de 6 meses. Eco de seguimiento por masa conocida.',
+  findings:[
+    'Sombra ac\u00fastica presente (sugestiva de calcificaci\u00f3n)',
+    'Vascularizaci\u00f3n abundante en Doppler color'
+  ],
+  ans:'nc',ansLabel:'No concluyente',tagC:'ft-a',
+  codes:'Criterios identificados: B3 (sombra ac\u00fastica) + M5 (Doppler alto)',
+  exp:'Tiene un criterio B (B3: sombra ac\u00fastica) y un criterio M (M5: Doppler alto) al mismo tiempo. Seg\u00fan las reglas IOTA: criterios B y M simult\u00e1neos = no concluyente. Se remite a ecografista experto nivel III o se complementa con modelo ADNEX, LR2, CA-125 o HE4. Esto ocurre en el 20-25% de los casos.'
+},
+{
+  nm:'Mariana',age:'34 a&ntilde;os',dist:'2 km',em:'\uD83C\uDF3B',
+  clinic:'G1P1. Premenop\u00e1usica. Sin antecedentes patol\u00f3gicos relevantes. Consulta por sensaci\u00f3n de pesadez p\u00e9lvica y aumento del per\u00edmetro abdominal. Niega dolor. Sin otros s\u00edntomas asociados.',
+  findings:[
+    'Tumor multilocular de di\u00e1metro mayor a 10 cm, sin \u00e1reas s\u00f3lidas en su interior',
+    'Sin vascularizaci\u00f3n en Doppler color'
+  ],
+  ans:'right',ansLabel:'Benigna',tagC:'ft-g',
+  codes:'Criterios identificados: B4 (multilocular >10 cm SIN s\u00f3lido) + B5 (Doppler ausente)',
+  exp:'Dos criterios de benignidad (B4 y B5), ning\u00fan criterio de malignidad. Tama\u00f1o grande NO es sin\u00f3nimo de malignidad. La clave es la ausencia de componente s\u00f3lido. Probable cistadenoma mucinoso. Compara con el siguiente caso.'
+},
+{
+  nm:'Lorena',age:'55 a&ntilde;os',dist:'4 km',em:'\uD83C\uDFB6',
+  clinic:'G2P2. Posmenop\u00e1usica desde los 50. Antecedente familiar de c\u00e1ncer de mama (madre). Consulta por p\u00e9rdida de peso de 5 kg en 2 meses, distensi\u00f3n abdominal y malestar p\u00e9lvico difuso.',
+  findings:[
+    'Tumor multilocular de di\u00e1metro mayor a 10 cm, con \u00e1reas s\u00f3lidas en su interior',
+    '4 o m\u00e1s proyecciones papilares'
+  ],
+  ans:'left',ansLabel:'Maligna',tagC:'ft-r',
+  codes:'Criterios identificados: M4 (multilocular >10 cm CON s\u00f3lido) + M3 (\u22654 papilas)',
+  exp:'Dos criterios de malignidad (M4 y M3), ning\u00fan criterio de benignidad. Se parece al caso de Mariana (multilocular >10 cm), pero esta tiene \u00c1REAS S\u00d3LIDAS. Esa diferencia convierte B4 en M4. El componente s\u00f3lido lo cambia todo.'
+}
+];
+
+let cur=0,ans=[],sx=0,cx=0,dr=false,lk=false;
+
+function mkC(c,i){
+const fs=c.findings.map(f=>`<div class="fr"><span class="bullet"></span><span>${f}</span></div>`).join('');
+return`<div class="sc ${i>0?'bh':''}" id="c${i}" style="z-index:${C.length-i}">
+<div class="ol ol-r" id="or${i}">BENIGNA</div>
+<div class="ol ol-l" id="ol${i}">MALIGNA</div>
+<div class="card-top">
+<div class="av">${c.em}</div>
+<div><div class="card-name">${c.nm}, ${c.age}</div><div class="card-age">${c.dist}</div></div>
+</div>
+<div class="clinic">
+<div class="clinic-label">Historia cl\u00ednica</div>
+<div class="clinic-text">${c.clinic}</div>
+</div>
+<div class="sep">Hallazgos ecogr\u00e1ficos</div>
+<div style="flex:1">${fs}</div>
+<div class="card-q">\u00bfCu\u00e1l es tu clasificaci\u00f3n?</div>
+</div>`}
+
+function init(){document.getElementById('stk').innerHTML=C.map((c,i)=>mkC(c,i)).join('');bindCard()}
+
+function bindCard(){const el=document.getElementById('c'+cur);if(!el)return;
+el.addEventListener('pointerdown',ps);el.addEventListener('pointermove',pm);
+el.addEventListener('pointerup',pe);el.addEventListener('pointercancel',pe)}
+
+function ps(e){if(lk)return;dr=true;sx=e.clientX;cx=0;
+const card=e.target.closest('.sc');card.classList.add('drag');card.setPointerCapture(e.pointerId)}
+
+function pm(e){if(!dr)return;cx=e.clientX-sx;const el=document.getElementById('c'+cur);if(!el)return;
+el.style.transform=`translateX(${cx}px) rotate(${cx*.06}deg)`;
+const or=document.getElementById('or'+cur),ol=document.getElementById('ol'+cur);
+if(or)or.style.opacity=Math.min(1,Math.max(0,cx/65));
+if(ol)ol.style.opacity=Math.min(1,Math.max(0,-cx/65))}
+
+function pe(){if(!dr)return;dr=false;const el=document.getElementById('c'+cur);if(!el)return;
+el.classList.remove('drag');
+if(Math.abs(cx)>80)doSwipe(cx>0?'right':'left');
+else{el.style.transform='';const or=document.getElementById('or'+cur),ol=document.getElementById('ol'+cur);
+if(or)or.style.opacity=0;if(ol)ol.style.opacity=0}}
+
+function doSwipe(dir){if(lk)return;lk=true;
+const el=document.getElementById('c'+cur);if(!el)return;
+const c=C[cur],ok=dir===c.ans;ans.push({dir,ok,c});
+if(dir==='right')el.classList.add('ex-r');
+else if(dir==='left')el.classList.add('ex-l');
+else{el.style.transform='translateY(-110%) scale(.85)';el.style.opacity='0'}
+setTimeout(()=>showFB(ok,c,dir),380)}
+
+function showFB(ok,c,dir){
+let fb=document.getElementById('fb');if(fb)fb.remove();
+const ch=dir==='right'?'Benigna':dir==='left'?'Maligna':'No concluyente';
+fb=document.createElement('div');fb.id='fb';fb.className='fb show';
+fb.innerHTML=`<div class="fb-ic">${ok?'\u2705':'\u274c'}</div>
+<div class="fb-t">${ok?'\u00a1Correcto!':'Incorrecto'}</div>
+<div class="fb-tag ${c.tagC}">${c.ansLabel}</div>
+${!ok?`<div style="font-size:12px;color:var(--text3);margin-bottom:6px">Tu respuesta: ${ch}</div>`:''}
+<div class="fb-codes">${c.codes}</div>
+<div class="fb-exp">${c.exp}</div>
+<button class="fb-nx" onclick="nxt()">Siguiente \u2192</button>`;
+document.getElementById('stk').appendChild(fb)}
+
+function nxt(){const fb=document.getElementById('fb');if(fb)fb.remove();cur++;lk=false;
+if(cur<C.length){document.getElementById('cnt').textContent=`Perfil ${cur+1} de 5`;
+const nx=document.getElementById('c'+cur);if(nx){nx.classList.remove('bh');bindCard()}}
+else showEnd()}
+
+function showEnd(){
+document.getElementById('stk').style.display='none';
+document.getElementById('acts').style.display='none';
+document.getElementById('leg').style.display='none';
+document.getElementById('cnt').style.display='none';
+const r=document.getElementById('rs'),ok=ans.filter(a=>a.ok).length;
+r.innerHTML=`<div class="rs-t">Tu sesi\u00f3n en IOTA-nder</div>
+<div class="rs-s">${ok}/5 correctas (${Math.round(ok/5*100)}%)</div>
+<div class="sg">
+<div class="sk"><div class="sv" style="color:var(--green)">${ans.filter(a=>a.c.ans==='right').length}</div><div class="sl">Benignas</div></div>
+<div class="sk"><div class="sv" style="color:var(--red)">${ans.filter(a=>a.c.ans==='left').length}</div><div class="sl">Malignas</div></div>
+<div class="sk"><div class="sv" style="color:var(--amber)">${ans.filter(a=>a.c.ans==='nc').length}</div><div class="sl">No concluyente</div></div>
+</div>
+${ans.map((a,i)=>{const ic=a.ok?'<span style="color:var(--green)">\u2713</span>':'<span style="color:var(--red)">\u2717</span>';
+const ch=a.dir==='right'?'Benigna':a.dir==='left'?'Maligna':'No concl.';
+return`<div class="row">${ic}<span style="flex:1;text-align:left">${C[i].nm}, ${C[i].age}</span><span style="color:var(--text2)">${ch}${!a.ok?' <span style="color:var(--text3)">(era '+a.c.ansLabel+')</span>':''}</span></div>`}).join('')}
+<div class="info-box">
+<strong>Reglas Simples IOTA</strong><br>
+\u2022 Sensibilidad: 90-93% &middot; Especificidad: 90-93%<br>
+\u2022 Aplicable en ~80% de masas anexiales<br>
+\u2022 5 criterios B (benignidad) + 5 criterios M (malignidad)<br>
+\u2022 \u22651 M + ninguna B = maligna<br>
+\u2022 \u22651 B + ninguna M = benigna<br>
+\u2022 Ambas o ninguna = no concluyente \u2192 experto<br><br>
+<strong>Ref:</strong> Timmerman D. et al. BMJ 2010;341:c6839
+</div>
+<button class="restart" onclick="restart()">Volver a jugar</button>`;
+r.classList.add('show')}
+
+function restart(){cur=0;ans=[];lk=false;
+['stk','acts','leg','cnt'].forEach(id=>{document.getElementById(id).style.display=''});
+document.getElementById('cnt').textContent='Perfil 1 de 5';
+const r=document.getElementById('rs');r.classList.remove('show');r.innerHTML='';init()}
+
+init();
+</script>
+</body>
+</html>
