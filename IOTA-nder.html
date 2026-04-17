@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>IOTA-nder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -21,98 +21,129 @@
 --red:#ef5350;--red-bg:rgba(239,83,80,.1);--amber:#ffca28;--amber-bg:rgba(255,202,40,.1);--purple:#b39ddb;
 }}
 *{margin:0;padding:0;box-sizing:border-box}
+html,body{overscroll-behavior:none}
 body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);
-display:flex;justify-content:center;min-height:100dvh;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
-.app{width:100%;max-width:440px;padding:1rem 1rem 2rem;display:flex;flex-direction:column;min-height:100dvh}
+display:flex;justify-content:center;min-height:100dvh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;
+padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.app{width:100%;max-width:440px;padding:.5rem 1rem 1rem;display:flex;flex-direction:column;min-height:100dvh;gap:.3rem}
 
-.hdr{text-align:center;padding:1rem 0 .8rem}
-.logo{font-family:'Instrument Serif',serif;font-size:32px;font-weight:400;letter-spacing:-.02em}
+.hdr{text-align:center;padding:.4rem 0 .2rem}
+.logo{font-family:'Instrument Serif',serif;font-size:clamp(24px,7vw,32px);font-weight:400;letter-spacing:-.02em;line-height:1.1}
 .logo em{font-style:italic;color:var(--pink)}
 .logo-s{font-size:11px;color:var(--text3);margin-top:2px;letter-spacing:.02em}
-.cnt{font-size:12px;color:var(--text2);margin-top:8px;font-weight:500}
+.cnt{font-size:12px;color:var(--text2);margin-top:6px;font-weight:500}
 
-.stk{position:relative;flex:1;min-height:460px}
+.stk{position:relative;flex:1;min-height:clamp(360px,55dvh,480px)}
 .sc{position:absolute;inset:0;background:var(--surface);border:1px solid var(--border);
-border-radius:20px;padding:1.3rem;display:flex;flex-direction:column;
+border-radius:20px;padding:clamp(.9rem,3vw,1.3rem);display:flex;flex-direction:column;
 transition:transform .4s cubic-bezier(.4,.2,.2,1),opacity .35s;cursor:grab;user-select:none;
-box-shadow:0 2px 12px rgba(0,0,0,.04)}
+box-shadow:0 2px 12px rgba(0,0,0,.04);overflow:hidden;touch-action:none;-webkit-user-select:none}
 .sc.drag{cursor:grabbing;transition:none}
 .sc.ex-r{transform:translateX(140%) rotate(14deg);opacity:0;pointer-events:none}
 .sc.ex-l{transform:translateX(-140%) rotate(-14deg);opacity:0;pointer-events:none}
+.sc.ex-u{transform:translateY(-120%) scale(.85);opacity:0;pointer-events:none}
 .sc.bh{transform:scale(.96) translateY(8px);opacity:.35;pointer-events:none;z-index:0!important}
 
-.card-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.av{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-font-size:22px;flex-shrink:0;background:var(--surface2);border:1.5px solid var(--border2)}
-.card-name{font-family:'Instrument Serif',serif;font-size:19px}
-.card-age{font-size:12px;color:var(--text2);margin-top:1px}
+.card-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+font-size:20px;flex-shrink:0;background:var(--surface2);border:1.5px solid var(--border2)}
+.card-name{font-family:'Instrument Serif',serif;font-size:18px;line-height:1.15}
+.card-age{font-size:12px;color:var(--text2);margin-top:2px}
 
-.clinic{background:var(--surface2);border-radius:12px;padding:12px 14px;margin-bottom:14px}
-.clinic-label{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--text3);margin-bottom:6px;text-transform:uppercase}
-.clinic-text{font-size:12.5px;color:var(--text2);line-height:1.55}
+.clinic{background:var(--surface2);border-radius:12px;padding:10px 12px;margin-bottom:12px}
+.clinic-label{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--text3);margin-bottom:5px;text-transform:uppercase}
+.clinic-text{font-size:12.5px;color:var(--text2);line-height:1.5}
 
-.sep{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--text3);margin-bottom:8px;text-transform:uppercase}
-.fr{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;line-height:1.45}
+.sep{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--text3);margin-bottom:6px;text-transform:uppercase}
+.fr{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;line-height:1.4}
 .fr:last-child{border-bottom:none}
 .bullet{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:6px;background:var(--text3)}
 
-.card-q{text-align:center;margin-top:auto;padding-top:14px;font-size:14px;font-weight:500;
+.card-q{text-align:center;margin-top:auto;padding-top:10px;font-size:13px;font-weight:500;
 color:var(--text3);font-family:'Instrument Serif',serif;font-style:italic}
 
-.ol{position:absolute;top:24px;padding:8px 18px;border-radius:10px;font-weight:700;font-size:15px;
-letter-spacing:.06em;opacity:0;pointer-events:none;z-index:10;border:2.5px solid}
-.ol-r{right:18px;color:var(--green);border-color:var(--green);background:var(--green-bg);transform:rotate(-10deg)}
-.ol-l{left:18px;color:var(--red);border-color:var(--red);background:var(--red-bg);transform:rotate(10deg)}
+.ol{position:absolute;padding:7px 16px;border-radius:10px;font-weight:700;font-size:14px;
+letter-spacing:.06em;opacity:0;pointer-events:none;z-index:10;border:2.5px solid;white-space:nowrap}
+.ol-r{top:24px;right:18px;color:var(--green);border-color:var(--green);background:var(--green-bg);transform:rotate(-10deg)}
+.ol-l{top:24px;left:18px;color:var(--red);border-color:var(--red);background:var(--red-bg);transform:rotate(10deg)}
+.ol-u{top:24px;left:50%;color:var(--amber);border-color:var(--amber);background:var(--amber-bg);transform:translateX(-50%)}
 
-.acts{display:flex;justify-content:center;gap:18px;padding:.8rem 0}
-.ab{width:58px;height:58px;border-radius:50%;border:1.5px solid var(--border2);background:var(--surface);
-display:flex;align-items:center;justify-content:center;cursor:pointer;
+.acts{display:flex;justify-content:center;gap:clamp(14px,4vw,22px);padding:.3rem 0 .1rem;align-items:flex-start}
+.ab-col{display:flex;flex-direction:column;align-items:center;gap:5px}
+.ab{width:clamp(52px,14vw,60px);height:clamp(52px,14vw,60px);border-radius:50%;border:1.5px solid var(--border2);background:var(--surface);
+display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
 transition:transform .15s,border-color .15s,box-shadow .15s}
 .ab:hover{transform:scale(1.08)}
 .ab:active{transform:scale(.95)}
+.bl{border-color:rgba(209,41,61,.28)}
 .bl:hover{border-color:var(--red);box-shadow:0 0 0 3px var(--red-bg)}
-.br:hover{border-color:var(--green);box-shadow:0 0 0 3px var(--green-bg)}
+.bq{border-color:rgba(181,133,10,.28)}
 .bq:hover{border-color:var(--amber);box-shadow:0 0 0 3px var(--amber-bg)}
+.br{border-color:rgba(45,138,78,.28)}
+.br:hover{border-color:var(--green);box-shadow:0 0 0 3px var(--green-bg)}
 .ab svg{display:block}
+.ab-lbl{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;text-align:center;line-height:1.1}
+.lbl-r{color:var(--red)}
+.lbl-g{color:var(--green)}
+.lbl-a{color:var(--amber)}
 
-.legend{display:flex;justify-content:center;gap:16px;font-size:11px;color:var(--text3);padding-bottom:.5rem}
-.legend span{display:flex;align-items:center;gap:4px}
+.hint{display:flex;justify-content:center;gap:clamp(8px,3vw,14px);font-size:10px;color:var(--text3);padding:.15rem 0 .4rem;flex-wrap:wrap}
+.hint span{display:flex;align-items:center;gap:3px;white-space:nowrap}
 
 .fb{position:absolute;inset:0;background:var(--surface);border:1px solid var(--border);border-radius:20px;
-padding:1.8rem;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;
-z-index:50;box-shadow:0 4px 24px rgba(0,0,0,.08);animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
+padding:1.4rem 1.1rem;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+z-index:50;box-shadow:0 4px 24px rgba(0,0,0,.08);animation:pop .4s cubic-bezier(.34,1.56,.64,1);overflow-y:auto}
 .fb.show{display:flex}
 @keyframes pop{0%{transform:scale(.82);opacity:0}100%{transform:scale(1);opacity:1}}
-.fb-ic{font-size:42px;margin-bottom:12px}
-.fb-t{font-size:18px;font-weight:600;margin-bottom:6px}
-.fb-tag{display:inline-block;font-size:12px;font-weight:700;padding:5px 16px;border-radius:20px;margin-bottom:12px}
+.fb-ic{font-size:38px;margin-bottom:8px}
+.fb-t{font-size:17px;font-weight:600;margin-bottom:6px}
+.fb-tag{display:inline-block;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;margin-bottom:10px}
 .ft-g{background:var(--green-bg);color:var(--green)}
 .ft-r{background:var(--red-bg);color:var(--red)}
 .ft-a{background:var(--amber-bg);color:var(--amber)}
-.fb-exp{font-size:13px;color:var(--text2);max-width:340px;line-height:1.6;margin-bottom:8px}
-.fb-codes{font-family:'Geist Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:16px}
+.fb-exp{font-size:12.5px;color:var(--text2);max-width:340px;line-height:1.55;margin-bottom:8px}
+.fb-codes{font-family:'Geist Mono',monospace;font-size:11.5px;color:var(--text3);margin-bottom:14px;padding:0 4px;line-height:1.5}
 .fb-nx{background:var(--text);color:var(--bg);border:none;padding:10px 28px;border-radius:100px;
 font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s}
 .fb-nx:hover{opacity:.85}
 
-.rs{display:none;text-align:center;padding:1.5rem 0}
+.rs{display:none;text-align:center;padding:1rem 0}
 .rs.show{display:block}
-.rs-t{font-family:'Instrument Serif',serif;font-size:24px;margin-bottom:4px}
-.rs-s{font-size:13px;color:var(--text2);margin-bottom:20px}
-.sg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px}
-.sk{background:var(--surface2);padding:14px 8px;border-radius:12px}
-.sv{font-size:24px;font-weight:600}
-.sl{font-size:11px;color:var(--text2);margin-top:2px}
-.row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--border);font-size:12.5px}
+.rs-t{font-family:'Instrument Serif',serif;font-size:22px;margin-bottom:4px}
+.rs-s{font-size:13px;color:var(--text2);margin-bottom:16px}
+.sg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
+.sk{background:var(--surface2);padding:12px 6px;border-radius:12px}
+.sv{font-size:22px;font-weight:600}
+.sl{font-size:10.5px;color:var(--text2);margin-top:2px}
+.row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
 .row:last-child{border-bottom:none}
-.info-box{background:var(--surface2);padding:14px;border-radius:12px;font-size:12px;color:var(--text2);
-margin:16px 0;line-height:1.6;text-align:left}
+.info-box{background:var(--surface2);padding:12px;border-radius:12px;font-size:11.5px;color:var(--text2);
+margin:12px 0;line-height:1.55;text-align:left}
 .info-box strong{color:var(--text);font-weight:600}
 .restart{background:var(--text);color:var(--bg);border:none;padding:12px 32px;border-radius:100px;
-font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px}
+font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:4px}
 .restart:hover{opacity:.85}
 
-.credit{text-align:center;font-size:10px;color:var(--text3);padding:1rem 0;margin-top:auto}
+.credit{text-align:center;font-size:10px;color:var(--text3);padding:.6rem 0 .2rem}
+
+@media(max-height:720px){
+.hdr{padding:.15rem 0 .1rem}
+.logo-s{display:none}
+.cnt{margin-top:3px}
+.stk{min-height:330px}
+.clinic{margin-bottom:8px;padding:8px 10px}
+.card-top{margin-bottom:8px}
+.fr{padding:5px 0;font-size:12.5px}
+.credit{display:none}
+}
+@media(max-height:600px){
+.stk{min-height:290px}
+.card-top .av{width:40px;height:40px;font-size:18px}
+.card-name{font-size:16px}
+.clinic-text{font-size:12px}
+.fr{font-size:12px;padding:4px 0}
+.card-q{padding-top:6px;font-size:12px}
+}
 </style>
 </head>
 <body>
@@ -124,17 +155,32 @@ font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;cursor
   </div>
   <div class="stk" id="stk"></div>
   <div class="acts" id="acts">
-    <button class="ab bl" onclick="doSwipe('left')" title="Maligna"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    <button class="ab bq" onclick="doSwipe('nc')" title="No concluyente"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a3 3 0 0 1 5.1 1.5c0 1.5-2.1 2-2.1 2"/><circle cx="12" cy="16.5" r=".5" fill="var(--amber)"/></svg></button>
-    <button class="ab br" onclick="doSwipe('right')" title="Benigna"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></button>
+    <div class="ab-col">
+      <button class="ab bl" onclick="doSwipe('left')" title="Maligna (desliza &larr;)" aria-label="Maligna">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <span class="ab-lbl lbl-r">Maligna</span>
+    </div>
+    <div class="ab-col">
+      <button class="ab bq" onclick="doSwipe('nc')" title="No concluyente (desliza &uarr;)" aria-label="No concluyente">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a3 3 0 0 1 5.1 1.5c0 1.5-2.1 2-2.1 2"/><circle cx="12" cy="16.5" r=".5" fill="var(--amber)"/></svg>
+      </button>
+      <span class="ab-lbl lbl-a">No concl.</span>
+    </div>
+    <div class="ab-col">
+      <button class="ab br" onclick="doSwipe('right')" title="Benigna (desliza &rarr;)" aria-label="Benigna">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </button>
+      <span class="ab-lbl lbl-g">Benigna</span>
+    </div>
   </div>
-  <div class="legend" id="leg">
-    <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Maligna</span>
-    <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/></svg> No concluyente</span>
-    <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg> Benigna</span>
+  <div class="hint" id="hint">
+    <span>&larr; Maligna</span>
+    <span>&uarr; No concl.</span>
+    <span>Benigna &rarr;</span>
   </div>
   <div class="rs" id="rs"></div>
-  <div class="credit">Reglas Simples IOTA &middot; Timmerman D. et al. BMJ 2010 &middot; Ginecolog&iacute;a 2026</div>
+  <div class="credit">Reglas Simples IOTA &middot; Timmerman D. et al. BMJ 2010</div>
 </div>
 
 <script>
@@ -197,13 +243,14 @@ const C=[
 }
 ];
 
-let cur=0,ans=[],sx=0,cx=0,dr=false,lk=false;
+let cur=0,ans=[],sx=0,sy=0,cx=0,cy=0,dr=false,lk=false,axis=null;
 
 function mkC(c,i){
 const fs=c.findings.map(f=>`<div class="fr"><span class="bullet"></span><span>${f}</span></div>`).join('');
 return`<div class="sc ${i>0?'bh':''}" id="c${i}" style="z-index:${C.length-i}">
-<div class="ol ol-r" id="or${i}">BENIGNA</div>
-<div class="ol ol-l" id="ol${i}">MALIGNA</div>
+<div class="ol ol-r" id="or${i}">BENIGNA \u2713</div>
+<div class="ol ol-l" id="ol${i}">MALIGNA \u2717</div>
+<div class="ol ol-u" id="ou${i}">NO CONCL. ?</div>
 <div class="card-top">
 <div class="av">${c.em}</div>
 <div><div class="card-name">${c.nm}, ${c.age}</div><div class="card-age">${c.dist}</div></div>
@@ -223,27 +270,39 @@ function bindCard(){const el=document.getElementById('c'+cur);if(!el)return;
 el.addEventListener('pointerdown',ps);el.addEventListener('pointermove',pm);
 el.addEventListener('pointerup',pe);el.addEventListener('pointercancel',pe)}
 
-function ps(e){if(lk)return;dr=true;sx=e.clientX;cx=0;
+function ps(e){if(lk)return;dr=true;sx=e.clientX;sy=e.clientY;cx=0;cy=0;axis=null;
 const card=e.target.closest('.sc');card.classList.add('drag');card.setPointerCapture(e.pointerId)}
 
-function pm(e){if(!dr)return;cx=e.clientX-sx;const el=document.getElementById('c'+cur);if(!el)return;
-el.style.transform=`translateX(${cx}px) rotate(${cx*.06}deg)`;
-const or=document.getElementById('or'+cur),ol=document.getElementById('ol'+cur);
-if(or)or.style.opacity=Math.min(1,Math.max(0,cx/65));
-if(ol)ol.style.opacity=Math.min(1,Math.max(0,-cx/65))}
+function pm(e){if(!dr)return;cx=e.clientX-sx;cy=e.clientY-sy;
+const el=document.getElementById('c'+cur);if(!el)return;
+const ax=Math.abs(cx),ay=Math.abs(cy);
+if(!axis && (ax>8||ay>8))axis=(ay>ax && cy<0)?'v':'h';
+const or=document.getElementById('or'+cur),ol=document.getElementById('ol'+cur),ou=document.getElementById('ou'+cur);
+if(axis==='v' && cy<0){
+  el.style.transform=`translateY(${cy}px) scale(${Math.max(.9,1-ay/1400)})`;
+  if(ou)ou.style.opacity=Math.min(1,ay/70);
+  if(or)or.style.opacity=0;if(ol)ol.style.opacity=0;
+}else if(axis==='h'){
+  el.style.transform=`translateX(${cx}px) rotate(${cx*.06}deg)`;
+  if(or)or.style.opacity=Math.min(1,Math.max(0,cx/65));
+  if(ol)ol.style.opacity=Math.min(1,Math.max(0,-cx/65));
+  if(ou)ou.style.opacity=0;
+}}
 
 function pe(){if(!dr)return;dr=false;const el=document.getElementById('c'+cur);if(!el)return;
 el.classList.remove('drag');
-if(Math.abs(cx)>80)doSwipe(cx>0?'right':'left');
-else{el.style.transform='';const or=document.getElementById('or'+cur),ol=document.getElementById('ol'+cur);
-if(or)or.style.opacity=0;if(ol)ol.style.opacity=0}}
+const ax=Math.abs(cx),ay=Math.abs(cy);
+if(axis==='v' && cy<-80)doSwipe('nc');
+else if(axis==='h' && ax>80)doSwipe(cx>0?'right':'left');
+else{el.style.transform='';['or','ol','ou'].forEach(p=>{const x=document.getElementById(p+cur);if(x)x.style.opacity=0})}}
 
 function doSwipe(dir){if(lk)return;lk=true;
-const el=document.getElementById('c'+cur);if(!el)return;
+const el=document.getElementById('c'+cur);if(!el){lk=false;return}
 const c=C[cur],ok=dir===c.ans;ans.push({dir,ok,c});
+el.style.transform='';
 if(dir==='right')el.classList.add('ex-r');
 else if(dir==='left')el.classList.add('ex-l');
-else{el.style.transform='translateY(-110%) scale(.85)';el.style.opacity='0'}
+else el.classList.add('ex-u');
 setTimeout(()=>showFB(ok,c,dir),380)}
 
 function showFB(ok,c,dir){
@@ -260,22 +319,22 @@ ${!ok?`<div style="font-size:12px;color:var(--text3);margin-bottom:6px">Tu respu
 document.getElementById('stk').appendChild(fb)}
 
 function nxt(){const fb=document.getElementById('fb');if(fb)fb.remove();cur++;lk=false;
-if(cur<C.length){document.getElementById('cnt').textContent=`Perfil ${cur+1} de 5`;
+if(cur<C.length){document.getElementById('cnt').textContent=`Perfil ${cur+1} de ${C.length}`;
 const nx=document.getElementById('c'+cur);if(nx){nx.classList.remove('bh');bindCard()}}
 else showEnd()}
 
 function showEnd(){
 document.getElementById('stk').style.display='none';
 document.getElementById('acts').style.display='none';
-document.getElementById('leg').style.display='none';
+document.getElementById('hint').style.display='none';
 document.getElementById('cnt').style.display='none';
 const r=document.getElementById('rs'),ok=ans.filter(a=>a.ok).length;
 r.innerHTML=`<div class="rs-t">Tu sesi\u00f3n en IOTA-nder</div>
-<div class="rs-s">${ok}/5 correctas (${Math.round(ok/5*100)}%)</div>
+<div class="rs-s">${ok}/${C.length} correctas (${Math.round(ok/C.length*100)}%)</div>
 <div class="sg">
 <div class="sk"><div class="sv" style="color:var(--green)">${ans.filter(a=>a.c.ans==='right').length}</div><div class="sl">Benignas</div></div>
 <div class="sk"><div class="sv" style="color:var(--red)">${ans.filter(a=>a.c.ans==='left').length}</div><div class="sl">Malignas</div></div>
-<div class="sk"><div class="sv" style="color:var(--amber)">${ans.filter(a=>a.c.ans==='nc').length}</div><div class="sl">No concluyente</div></div>
+<div class="sk"><div class="sv" style="color:var(--amber)">${ans.filter(a=>a.c.ans==='nc').length}</div><div class="sl">No concl.</div></div>
 </div>
 ${ans.map((a,i)=>{const ic=a.ok?'<span style="color:var(--green)">\u2713</span>':'<span style="color:var(--red)">\u2717</span>';
 const ch=a.dir==='right'?'Benigna':a.dir==='left'?'Maligna':'No concl.';
@@ -293,9 +352,9 @@ return`<div class="row">${ic}<span style="flex:1;text-align:left">${C[i].nm}, ${
 <button class="restart" onclick="restart()">Volver a jugar</button>`;
 r.classList.add('show')}
 
-function restart(){cur=0;ans=[];lk=false;
-['stk','acts','leg','cnt'].forEach(id=>{document.getElementById(id).style.display=''});
-document.getElementById('cnt').textContent='Perfil 1 de 5';
+function restart(){cur=0;ans=[];lk=false;axis=null;
+['stk','acts','hint','cnt'].forEach(id=>{document.getElementById(id).style.display=''});
+document.getElementById('cnt').textContent=`Perfil 1 de ${C.length}`;
 const r=document.getElementById('rs');r.classList.remove('show');r.innerHTML='';init()}
 
 init();
